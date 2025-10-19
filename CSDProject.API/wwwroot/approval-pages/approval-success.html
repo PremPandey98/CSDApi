@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Approved Successfully</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 500px;
+            text-align: center;
+            margin: 20px;
+        }
+        .success-icon {
+            font-size: 80px;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 28px;
+        }
+        .project-name {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 20px;
+            margin: 15px 0;
+        }
+        .description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .status-badge {
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 20px 0;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #999;
+            font-size: 14px;
+        }
+        .btn {
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #5a6fd8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon">✅</div>
+        <h1>Project Approved Successfully!</h1>
+        <div class="project-name" id="projectName">Project Name</div>
+        <div class="description">
+            The student project has been approved and is now live in the system. 
+            The student will receive a notification email about this approval.
+        </div>
+        <div class="status-badge">APPROVED</div>
+        <div class="footer">
+            <p>Thank you for your review!</p>
+            <p><strong>CSD Project Management System</strong></p>
+            <p>Computer Science Department, Panchayat College, Bargarh</p>
+        </div>
+    </div>
+
+    <script>
+        // Get project name from URL parameters if available
+        const urlParams = new URLSearchParams(window.location.search);
+        const projectName = urlParams.get('projectName');
+        if (projectName) {
+            document.getElementById('projectName').textContent = decodeURIComponent(projectName);
+        }
+    </script>
+</body>
+</html>

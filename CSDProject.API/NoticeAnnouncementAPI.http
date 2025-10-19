@@ -1,0 +1,277 @@
+### Notice and Announcement API Documentation
+
+# ===========================================
+# NOTICE API ENDPOINTS
+# ===========================================
+
+### 1. Create Notice (Admin/Teacher Only)
+POST https://localhost:5001/api/notice/create
+Authorization: Bearer YOUR_JWT_TOKEN
+Content-Type: multipart/form-data
+
+# Form Data:
+# Title: Semester Exam Schedule
+# Content: Semester exams will begin from November 1st, 2025. Please check the detailed schedule attached.
+# Category: Academic
+# Priority: High
+# TargetAudience: Student
+# IsActive: true
+# IsPinned: true
+# ExpiryDate: 2025-12-31
+# Attachment: @/path/to/exam_schedule.pdf
+
+###
+
+### 2. Get All Notices (with Pagination and Filters)
+GET https://localhost:5001/api/notice/all?pageNumber=1&pageSize=10
+###
+
+GET https://localhost:5001/api/notice/all?pageNumber=1&pageSize=10&search=exam&category=Academic&priority=High&targetAudience=Student&isActive=true
+###
+
+GET https://localhost:5001/api/notice/all?pageNumber=2&pageSize=20&startDate=2025-01-01&endDate=2025-12-31
+###
+
+### 3. Get Active Notices (Public Access)
+GET https://localhost:5001/api/notice/active
+###
+
+GET https://localhost:5001/api/notice/active?targetAudience=Student
+###
+
+### 4. Get Notice By ID
+GET https://localhost:5001/api/notice/1
+###
+
+### 5. Update Notice (Admin/Teacher Only)
+PUT https://localhost:5001/api/notice/update/1
+Authorization: Bearer YOUR_JWT_TOKEN
+Content-Type: multipart/form-data
+
+# Form Data:
+# Title: Updated Exam Schedule
+# Content: Exam dates have been revised. New schedule attached.
+# Category: Academic
+# Priority: Urgent
+# TargetAudience: Student
+# IsActive: true
+# IsPinned: true
+# ExpiryDate: 2025-12-31
+# Attachment: @/path/to/updated_schedule.pdf
+
+###
+
+### 6. Delete Notice (Admin/Teacher Only) - Soft Delete
+DELETE https://localhost:5001/api/notice/delete/1
+Authorization: Bearer YOUR_JWT_TOKEN
+###
+
+### 7. Get Notices By Audience
+GET https://localhost:5001/api/notice/by-audience/Student
+###
+
+GET https://localhost:5001/api/notice/by-audience/Teacher
+###
+
+GET https://localhost:5001/api/notice/by-audience/All
+###
+
+# ===========================================
+# ANNOUNCEMENT API ENDPOINTS
+# ===========================================
+
+### 1. Create Announcement (Admin/Teacher Only)
+POST https://localhost:5001/api/announcement/create
+Authorization: Bearer YOUR_JWT_TOKEN
+Content-Type: multipart/form-data
+
+# Form Data:
+# Title: Annual Tech Fest 2025
+# Content: Join us for the Annual Tech Fest from Dec 15-17. Register now!
+# Category: Event
+# Priority: Normal
+# TargetAudience: All
+# IsActive: true
+# IsPinned: false
+# ExpiryDate: 2025-12-18
+# Attachment: @/path/to/techfest_poster.jpg
+
+###
+
+### 2. Get All Announcements (with Pagination and Filters)
+GET https://localhost:5001/api/announcement/all?pageNumber=1&pageSize=10
+###
+
+GET https://localhost:5001/api/announcement/all?pageNumber=1&pageSize=10&search=fest&category=Event&priority=Normal
+###
+
+GET https://localhost:5001/api/announcement/all?pageNumber=1&pageSize=15&isPinned=true&isActive=true
+###
+
+### 3. Get Active Announcements (Public Access)
+GET https://localhost:5001/api/announcement/active
+###
+
+GET https://localhost:5001/api/announcement/active?targetAudience=All
+###
+
+### 4. Get Announcement By ID
+GET https://localhost:5001/api/announcement/1
+###
+
+### 5. Update Announcement (Admin/Teacher Only)
+PUT https://localhost:5001/api/announcement/update/1
+Authorization: Bearer YOUR_JWT_TOKEN
+Content-Type: multipart/form-data
+
+# Form Data:
+# Title: Updated Tech Fest Schedule
+# Content: Tech Fest dates extended! Now from Dec 15-20.
+# Category: Event
+# Priority: High
+# TargetAudience: All
+# IsActive: true
+# IsPinned: true
+# ExpiryDate: 2025-12-21
+
+###
+
+### 6. Delete Announcement (Admin/Teacher Only) - Soft Delete
+DELETE https://localhost:5001/api/announcement/delete/1
+Authorization: Bearer YOUR_JWT_TOKEN
+###
+
+### 7. Get Announcements By Audience
+GET https://localhost:5001/api/announcement/by-audience/Student
+###
+
+GET https://localhost:5001/api/announcement/by-audience/Teacher
+###
+
+GET https://localhost:5001/api/announcement/by-audience/All
+###
+
+# ===========================================
+# SAMPLE RESPONSES
+# ===========================================
+
+### Create Notice Response
+# {
+#   "message": "Notice created successfully",
+#   "notice": {
+#     "noticeId": 1,
+#     "title": "Semester Exam Schedule",
+#     "content": "Semester exams will begin from November 1st, 2025...",
+#     "category": "Academic",
+#     "priority": "High",
+#     "targetAudience": "Student",
+#     "isActive": true,
+#     "isPinned": true,
+#     "attachmentUrl": "https://localhost:5001/uploads/notices/abc123.pdf",
+#     "viewCount": 0,
+#     "expiryDate": "2025-12-31T00:00:00Z",
+#     "createdBy": 5,
+#     "creatorName": "Dr. John Smith",
+#     "creatorRole": "TEACHER",
+#     "createdAt": "2025-10-19T10:30:00Z",
+#     "updatedAt": null
+#   }
+# }
+
+### Get All Notices Response (Paginated)
+# {
+#   "data": [
+#     {
+#       "noticeId": 3,
+#       "title": "Holiday Announcement",
+#       "content": "College will be closed on Oct 20th...",
+#       "category": "General",
+#       "priority": "Normal",
+#       "targetAudience": "All",
+#       "isActive": true,
+#       "isPinned": false,
+#       "attachmentUrl": null,
+#       "viewCount": 45,
+#       "expiryDate": null,
+#       "createdBy": 2,
+#       "creatorName": "Admin User",
+#       "creatorRole": "SUPER_ADMIN",
+#       "createdAt": "2025-10-18T14:20:00Z",
+#       "updatedAt": null
+#     },
+#     // ... more notices
+#   ],
+#   "pageNumber": 1,
+#   "pageSize": 10,
+#   "totalCount": 156,
+#   "totalPages": 16,
+#   "hasPreviousPage": false,
+#   "hasNextPage": true
+# }
+
+# ===========================================
+# FILTER PARAMETERS
+# ===========================================
+
+# Available filters for both Notice and Announcement:
+# - search: Search in title and content (string)
+# - category: Filter by category (string)
+# - priority: Low | Normal | High | Urgent
+# - targetAudience: All | Student | Teacher
+# - isActive: true | false
+# - isPinned: true | false
+# - startDate: Filter from date (YYYY-MM-DD)
+# - endDate: Filter to date (YYYY-MM-DD)
+# - pageNumber: Page number (default: 1)
+# - pageSize: Items per page (default: 10)
+
+# ===========================================
+# AUTHORIZATION
+# ===========================================
+
+# Public Access (No Auth Required):
+# - GET /api/notice/active
+# - GET /api/notice/by-audience/{audience}
+# - GET /api/announcement/active
+# - GET /api/announcement/by-audience/{audience}
+
+# Authenticated Users (JWT Required):
+# - GET /api/notice/all
+# - GET /api/notice/{id}
+# - GET /api/announcement/all
+# - GET /api/announcement/{id}
+
+# Admin/Teacher Only (JWT + Role Required):
+# - POST /api/notice/create
+# - PUT /api/notice/update/{id}
+# - DELETE /api/notice/delete/{id}
+# - POST /api/announcement/create
+# - PUT /api/announcement/update/{id}
+# - DELETE /api/announcement/delete/{id}
+
+# ===========================================
+# FILE UPLOAD
+# ===========================================
+
+# Allowed file types: .pdf, .jpg, .jpeg, .png, .doc, .docx
+# Maximum file size: 10MB
+# Files are stored in:
+# - Notices: wwwroot/uploads/notices/
+# - Announcements: wwwroot/uploads/announcements/
+
+# ===========================================
+# FEATURES IMPLEMENTED
+# ===========================================
+
+# ✅ Full CRUD operations (Create, Read, Update, Delete)
+# ✅ Pagination with metadata (pageNumber, pageSize, totalCount, totalPages)
+# ✅ Advanced filtering (search, category, priority, date range, status)
+# ✅ File upload support with validation
+# ✅ Role-based authorization (SUPER_ADMIN, TEACHER, Student)
+# ✅ Soft delete (IsDeleted flag)
+# ✅ View count tracking
+# ✅ Pinned notices/announcements (show at top)
+# ✅ Expiry date handling
+# ✅ Target audience filtering (All, Student, Teacher)
+# ✅ Active/Inactive status
+# ✅ Creator information in responses

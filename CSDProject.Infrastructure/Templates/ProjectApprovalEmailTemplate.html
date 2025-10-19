@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Approval Request</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .project-details {
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+            background-color: #f8f9fa;
+        }
+        .action-buttons {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            margin: 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 16px;
+            color: white;
+        }
+        .btn-approve {
+            background-color: #28a745;
+        }
+        .btn-approve:hover {
+            background-color: #218838;
+        }
+        .btn-reject {
+            background-color: #dc3545;
+        }
+        .btn-reject:hover {
+            background-color: #c82333;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+            font-size: 12px;
+            color: #6c757d;
+            text-align: center;
+        }
+        .important-note {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎓 Student Project Approval Request</h1>
+        <p>A new project requires your approval</p>
+    </div>
+
+    <p>Dear <strong>{{TeacherName}}</strong>,</p>
+    
+    <p>Student <strong>{{StudentName}}</strong> has submitted a new project that requires your approval as the guiding teacher.</p>
+
+    <div class="project-details">
+        <h2>📋 Project Details</h2>
+        <p><strong>Project Name:</strong> {{ProjectName}}</p>
+        <p><strong>Description:</strong> {{ProjectDescription}}</p>
+        {{#if ProjectLink}}
+        <p><strong>Project Link:</strong> <a href="{{ProjectLink}}" target="_blank">{{ProjectLink}}</a></p>
+        {{/if}}
+        <p><strong>Created By:</strong> {{StudentName}}</p>
+        <p><strong>Submitted On:</strong> {{SubmissionDate}}</p>
+    </div>
+
+    <div class="important-note">
+        <strong>⏰ Important:</strong> This approval request will expire in 7 days ({{ExpiryDate}}). Please review and take action before the deadline.
+    </div>
+
+    <div class="action-buttons">
+        <h3>Please choose your action:</h3>
+        <a href="{{ApproveUrl}}" class="btn btn-approve">
+            ✅ APPROVE PROJECT
+        </a>
+        <a href="{{RejectUrl}}" class="btn btn-reject">
+            ❌ REJECT PROJECT
+        </a>
+    </div>
+
+    <div class="footer">
+        <p>This is an automated email from the CSD Project Management System.</p>
+        <p>If you did not expect this email or have any questions, please contact the system administrator.</p>
+        <p><strong>Note:</strong> Each action link can only be used once. After you approve or reject, the project status will be final.</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,99 @@
+AuthController API Endpoints
+
+1. POST /api/auth/login
+Request Body:
+{
+  "email": "user@example.com",
+  "password": "yourPassword"
+}
+Possible Responses:
+- 200 OK
+  {
+    "token": "jwt_token_string",
+    "name": "User Name",
+    "isFirstTimeLogin": false,
+    "message": "Login successful",
+    "role": "User",
+    "otpRequired": false
+  }
+- 401 Unauthorized
+  "Invalid credentials or inactive account"
+- 400 Bad Request
+  Model validation errors (missing email/password, invalid email format)
+
+2. POST /api/auth/verify-otp
+Request Body:
+{
+  "email": "user@example.com",
+  "otpCode": 123456
+}
+Possible Responses:
+- 200 OK
+  {
+    "token": "jwt_token_string",
+    "name": "User Name",
+    "isFirstTimeLogin": false,
+    "message": "OTP verified, login successful",
+    "role": "User",
+    "otpRequired": false
+  }
+- 400 Bad Request
+  { "Message": "Email and OTP are required." }
+- 401 Unauthorized
+  { "Message": "Invalid or expired OTP" }
+
+3. POST /api/auth/forgot-password
+Request Body:
+{
+  "email": "user@example.com"
+}
+Possible Responses:
+- 200 OK
+  "OTP sent to your email address"
+- 400 Bad Request
+  "Email is required"
+- 404 Not Found
+  "User not found"
+
+4. POST /api/auth/reset-password
+Request Body:
+{
+  "email": "user@example.com",
+  "otpCode": "123456",
+  "newPassword": "newPassword123"
+}
+Possible Responses:
+- 200 OK
+  "Password reset successfully"
+- 400 Bad Request
+  "Email, OTP, and new password are required"
+  or
+  "Invalid or expired OTP, or user not found"
+
+5. POST /api/auth/logout (Requires Authorization)
+Headers:
+Authorization: Bearer <jwt_token>
+Possible Responses:
+- 200 OK
+  "Logged out successfully"
+
+Example Data and Scenarios
+
+Login
+- Valid: Existing user, correct password.
+- Invalid: Wrong password, inactive account, missing fields.
+
+Verify OTP
+- Valid: Correct OTP sent to email.
+- Invalid: Wrong OTP, expired OTP, missing fields.
+
+Forgot Password
+- Valid: Registered email.
+- Invalid: Unregistered email, missing email.
+
+Reset Password
+- Valid: Correct OTP, new password.
+- Invalid: Wrong/expired OTP, missing fields, unregistered email.
+
+Logout
+- Valid: Valid JWT token in header.
