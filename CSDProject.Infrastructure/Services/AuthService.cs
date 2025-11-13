@@ -40,6 +40,47 @@ namespace CSDProject.Infrastructure.Services
             if (user == null)
                 return null;
 
+            // Check if user account is deleted
+            if (user.IsDeleted == true)
+            {
+                return new LoginResponse
+                {
+                    Message = "This account is not available. Please contact the administrator.",
+                    OtpRequired = false
+                };
+            }
+
+            // Device validation for mobile login
+            if (request.IsMobileDeviceLogin)
+            {
+                // Validate DeviceId is provided
+                if (string.IsNullOrWhiteSpace(request.DeviceId))
+                {
+                    return new LoginResponse
+                    {
+                        Message = "Device ID is required for mobile device login.",
+                        OtpRequired = false
+                    };
+                }
+
+                // Check if user has a stored device ID
+                if (!string.IsNullOrWhiteSpace(user.DeviceId))
+                {
+                    // Compare device IDs
+                    if (user.DeviceId != request.DeviceId)
+                    {
+                        // Different device - send notification to admin and block login
+                        await SendDeviceMismatchNotificationAsync(user, request.DeviceId);
+                        
+                        return new LoginResponse
+                        {
+                            Message = "You are trying to log in from a different device. Please contact the administrator for assistance.",
+                            OtpRequired = false
+                        };
+                    }
+                }
+            }
+
             string accountStatus = user.AccountStatus?.ToLower() ?? "";
             string role = user.Role?.ToLower() ?? "";
 
@@ -48,8 +89,8 @@ namespace CSDProject.Infrastructure.Services
 
             return accountStatus switch
             {
-                "lock" => await HandleFirstTimeLogin(user, request.Password),
-                "unlock" => await HandleRegularLogin(user, request.Password),
+                "lock" => await HandleFirstTimeLogin(user, request.Password, request),
+                "unlock" => await HandleRegularLogin(user, request.Password, request),
                 _ => null,
             };
         }
@@ -99,11 +140,19 @@ namespace CSDProject.Infrastructure.Services
         }
 
         // ---------------- First-Time Login ----------------
-        private async Task<LoginResponse?> HandleFirstTimeLogin(User user, string tempPassword)
+        private async Task<LoginResponse?> HandleFirstTimeLogin(User user, string tempPassword, LoginRequest request)
         {
             bool isPasswordValid = BCrypt.Net.BCrypt.Verify(tempPassword, user.Password);
 
             if (!isPasswordValid) return null;
+
+            // Save device info if mobile login
+            if (request.IsMobileDeviceLogin && !string.IsNullOrWhiteSpace(request.DeviceId))
+            {
+                user.DeviceId = request.DeviceId;
+                user.IsMobileDeviceLogin = true;
+                await _db.SaveChangesAsync();
+            }
 
             var token = GenerateJwtToken(user);
             return new LoginResponse
@@ -117,11 +166,19 @@ namespace CSDProject.Infrastructure.Services
         }
 
         // ---------------- Regular Login ----------------
-        private async Task<LoginResponse?> HandleRegularLogin(User user, string password)
+        private async Task<LoginResponse?> HandleRegularLogin(User user, string password, LoginRequest request)
         {
             bool isPasswordValid = BCrypt.Net.BCrypt.Verify(password, user.Password);
 
             if (!isPasswordValid) return null;
+
+            // Save device info if mobile login and no device stored yet
+            if (request.IsMobileDeviceLogin && !string.IsNullOrWhiteSpace(request.DeviceId) && string.IsNullOrWhiteSpace(user.DeviceId))
+            {
+                user.DeviceId = request.DeviceId;
+                user.IsMobileDeviceLogin = true;
+                await _db.SaveChangesAsync();
+            }
 
             var token = GenerateJwtToken(user);
             return new LoginResponse
@@ -266,6 +323,106 @@ namespace CSDProject.Infrastructure.Services
             }
 
             return false;
+        }
+
+        // ---------------- Email Verification Flow ----------------
+        public async Task<bool> SendEmailVerificationAsync(string email, string name)
+        {
+            // Generate 6-digit OTP
+            var otp = new Random().Next(100000, 999999);
+            var expiryTime = DateTime.UtcNow.AddMinutes(10);
+
+            // Check if there's an existing record for this email
+            var existingRecord = await _otpDb.CsdEmailValidations
+                .Where(x => x.Email == email)
+                .OrderByDescending(x => x.ExpiryTime)
+                .FirstOrDefaultAsync();
+
+            if (existingRecord != null)
+            {
+                // Update existing record
+                existingRecord.Name = name;
+                existingRecord.Otp = otp;
+                existingRecord.OtpStatus = "Unverified";
+                existingRecord.ExpiryTime = expiryTime;
+            }
+            else
+            {
+                // Generate next EmailId from the sequence or max ID
+                var maxId = await _otpDb.CsdEmailValidations
+                    .MaxAsync(x => (int?)x.EmailId) ?? 0;
+
+                // Create new record with explicit EmailId
+                var newRecord = new CsdEmailValidation
+                {
+                    EmailId = maxId + 1,  // Explicit ID assignment
+                    Email = email,
+                    Name = name,
+                    Otp = otp,
+                    OtpStatus = "Unverified",
+                    ExpiryTime = expiryTime
+                };
+                _otpDb.CsdEmailValidations.Add(newRecord);
+            }
+
+            await _otpDb.SaveChangesAsync();
+
+            // Send email with OTP
+            await _emailService.SendOtpEmailAsync(email, name, otp.ToString());
+
+            return true;
+        }
+
+        public async Task<bool> VerifyEmailAsync(string email, int otp)
+        {
+            // Find the latest unverified OTP record for this email
+            var record = await _otpDb.CsdEmailValidations
+                .Where(x => x.Email == email && x.Otp == otp && x.OtpStatus == "Unverified")
+                .OrderByDescending(x => x.ExpiryTime)
+                .FirstOrDefaultAsync();
+
+            // Check if record exists and is not expired
+            if (record == null || record.ExpiryTime < DateTime.UtcNow)
+                return false;
+
+            // Mark OTP as verified
+            record.OtpStatus = "Verified";
+            await _otpDb.SaveChangesAsync();
+
+            return true;
+        }
+
+        // ---------------- Device Mismatch Notification ----------------
+        private async Task SendDeviceMismatchNotificationAsync(User user, string attemptedDeviceId)
+        {
+            try
+            {
+                // Get all admin users
+                var adminUsers = await _db.Users
+                    .Where(u => u.Role != null && (u.Role.ToLower() == "admin" || u.Role.ToLower() == "super_admin"))
+                    .Select(u => u.Email)
+                    .Where(e => e != null)
+                    .ToListAsync();
+
+                if (adminUsers.Any())
+                {
+                    var adminEmails = adminUsers.Select(e => e!).ToList();
+                    
+                    await _emailService.SendDeviceMismatchNotificationAsync(
+                        user.Name ?? "Unknown User",
+                        user.Email ?? "Unknown Email",
+                        user.Role ?? "Unknown Role",
+                        user.DeviceId ?? "Unknown Device",
+                        attemptedDeviceId,
+                        DateTime.Now,
+                        adminEmails
+                    );
+                }
+            }
+            catch (Exception)
+            {
+                // Log error but don't throw - email failure shouldn't block the response
+            }
         }
     }
 }

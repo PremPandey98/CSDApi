@@ -365,5 +365,60 @@ public class EmailService : IEmailService
         }
     }
 
+    public async Task<bool> SendDeviceMismatchNotificationAsync(string userName, string userEmail, 
+        string userRole, string registeredDeviceId, string attemptedDeviceId, 
+        DateTime attemptTime, List<string> adminEmails)
+    {
+        try
+        {
+            // Read template
+            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, 
+                "Templates", "DeviceMismatchNotification.html");
+            var emailBody = await File.ReadAllTextAsync(templatePath);
+
+            // Replace placeholders
+            emailBody = emailBody
+                .Replace("{{UserName}}", userName)
+                .Replace("{{UserEmail}}", userEmail)
+                .Replace("{{UserRole}}", userRole)
+                .Replace("{{RegisteredDeviceId}}", registeredDeviceId)
+                .Replace("{{AttemptedDeviceId}}", attemptedDeviceId)
+                .Replace("{{AttemptTime}}", attemptTime.ToString("MMM dd, yyyy hh:mm tt"))
+                .Replace("{{AlertTime}}", DateTime.Now.ToString("MMM dd, yyyy hh:mm tt"));
+
+            using var client = new SmtpClient(_config["EmailSettings:SmtpHost"], 587)
+            {
+                EnableSsl = true,
+                Credentials = new NetworkCredential(
+                    _config["EmailSettings:Username"],
+                    _config["EmailSettings:Password"])
+            };
+
+            var subject = "🔒 Security Alert: Unauthorized Device Login Attempt";
+
+            // Send to all admin emails
+            foreach (var adminEmail in adminEmails)
+            {
+                var message = new MailMessage(
+                    _config["EmailSettings:FromEmail"]!,
+                    adminEmail,
+                    subject,
+                    emailBody)
+                {
+                    IsBodyHtml = true
+                };
+
+                await client.SendMailAsync(message);
+            }
+
+            return true;
+        }
+        catch (Exception)
+        {
+            // Log error in production
+            return false;
+        }
+    }
+
 
 }

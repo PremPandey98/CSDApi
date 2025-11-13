@@ -13,4 +13,7 @@ public interface IEmailService
     Task<bool> SendProjectStatusNotificationEmailAsync(string studentEmail, string studentName,
         string teacherName, string projectName, string projectDescription, 
         bool isApproved, DateTime decisionDate);
+
+    Task<bool> SendDeviceMismatchNotificationAsync(string userName, string userEmail, string userRole,
+        string registeredDeviceId, string attemptedDeviceId, DateTime attemptTime, List<string> adminEmails);
 }

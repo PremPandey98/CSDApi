@@ -10,4 +10,8 @@ public class LoginRequest
 
     [Required]
     public string Password { get; set; } = string.Empty;
+
+    public string? DeviceId { get; set; }
+
+    public bool IsMobileDeviceLogin { get; set; }
 }

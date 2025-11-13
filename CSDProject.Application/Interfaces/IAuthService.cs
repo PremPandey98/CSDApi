@@ -8,6 +8,7 @@ public interface IAuthService
     Task<bool> IsTokenBlacklistedAsync(string token);
     Task<bool> SendForgotPasswordOtpAsync(string email);
     Task<bool> ResetPasswordWithOtpAsync(string email, string otpCode, string newPassword);
-
     Task<LoginResponse?> VerifyLoginOtpAsync(string email, int enteredOtp);
+    Task<bool> SendEmailVerificationAsync(string email, string name);
+    Task<bool> VerifyEmailAsync(string email, int otp);
 }

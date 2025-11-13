@@ -38,15 +38,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 var app = builder.Build();
 
 // -----------------------------
-// 4️⃣ CORS
+// 4️⃣ CORS - Allow All Origins
 // -----------------------------
 app.UseCors(builder =>
 {
     builder
-        .WithOrigins("http://localhost:3000")
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-        .AllowCredentials();
+        .AllowAnyOrigin()      // Allow all websites/origins
+        .AllowAnyMethod()      // Allow GET, POST, PUT, DELETE, etc.
+        .AllowAnyHeader();     // Allow all headers
+    // Note: .AllowCredentials() cannot be used with .AllowAnyOrigin()
 });
 
 // -----------------------------

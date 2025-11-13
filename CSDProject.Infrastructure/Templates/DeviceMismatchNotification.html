@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Alert - Device Mismatch</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            background-color: #dc3545;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .alert-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        .user-details {
+            background-color: #f8f9fa;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .user-details h3 {
+            margin-top: 0;
+            color: #dc3545;
+        }
+        .detail-row {
+            margin: 10px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        .label {
+            font-weight: bold;
+            color: #495057;
+            display: inline-block;
+            width: 150px;
+        }
+        .value {
+            color: #212529;
+        }
+        .warning-message {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #856404;
+        }
+        .action-required {
+            background-color: #e7f3ff;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #dee2e6;
+            text-align: center;
+            font-size: 12px;
+            color: #6c757d;
+        }
+        .timestamp {
+            font-style: italic;
+            color: #6c757d;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="alert-icon">⚠️</div>
+            <h1>Security Alert: Unauthorized Device Login Attempt</h1>
+        </div>
+
+        <p>Dear Administrator,</p>
+
+        <p>This is an automated security alert from the CSD Application system. A user has attempted to log in from a different device than the one registered in the system.</p>
+
+        <div class="user-details">
+            <h3>User Information</h3>
+            <div class="detail-row">
+                <span class="label">User Name:</span>
+                <span class="value">{{UserName}}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Email:</span>
+                <span class="value">{{UserEmail}}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Role:</span>
+                <span class="value">{{UserRole}}</span>
+            </div>
+        </div>
+
+        <div class="user-details">
+            <h3>Device Information</h3>
+            <div class="detail-row">
+                <span class="label">Registered Device ID:</span>
+                <span class="value">{{RegisteredDeviceId}}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Attempted Device ID:</span>
+                <span class="value">{{AttemptedDeviceId}}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Attempt Time:</span>
+                <span class="value">{{AttemptTime}}</span>
+            </div>
+        </div>
+
+        <div class="warning-message">
+            <strong>⚠️ Security Notice:</strong> The login attempt has been automatically blocked to protect the user account. The user has been notified to contact administration.
+        </div>
+
+        <div class="action-required">
+            <h3 style="margin-top: 0;">Action Required</h3>
+            <p><strong>Please review this security event and take appropriate action:</strong></p>
+            <ul>
+                <li>Verify the login attempt with the user</li>
+                <li>If legitimate, update the registered device ID in the system</li>
+                <li>If unauthorized, investigate potential security breach</li>
+                <li>Consider implementing additional security measures if needed</li>
+            </ul>
+        </div>
+
+        <p class="timestamp">Alert generated on: {{AlertTime}}</p>
+
+        <div class="footer">
+            <p><strong>Computer Science Department</strong><br>
+            Panchayat College, Bargarh</p>
+            <p>This is an automated security notification. Please do not reply to this email.</p>
+        </div>
+    </div>
+</body>
+</html>

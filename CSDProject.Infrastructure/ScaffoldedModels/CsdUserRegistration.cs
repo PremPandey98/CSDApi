@@ -37,6 +37,10 @@ public partial class CsdUserRegistration
 
     public DateOnly? UpdatedOn { get; set; }
 
+    public string? DeviceId { get; set; }
+
+    public bool? IsMobileDeviceLogin { get; set; }
+
     public virtual CsdAdminRegistration? CsdAdminRegistration { get; set; }
 
     public virtual CsdFacultyRegistration? CsdFacultyRegistration { get; set; }

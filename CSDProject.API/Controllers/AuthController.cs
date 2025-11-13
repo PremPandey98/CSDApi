@@ -49,8 +49,45 @@ public class AuthController : ControllerBase
         return Ok(result);
     }
 
+    [HttpPost("send-email-verification")]
+    public async Task<IActionResult> SendEmailVerification([FromBody] SendEmailVerificationRequest request)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
 
+        try
+        {
+            var result = await _authService.SendEmailVerificationAsync(request.Email, request.Name);
+            if (!result)
+                return BadRequest(new { Message = "Failed to send verification email" });
 
+            return Ok(new { Message = "Verification email sent successfully. Please check your inbox." });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { Message = "An error occurred", Error = ex.Message });
+        }
+    }
+
+    [HttpPost("verify-email")]
+    public async Task<IActionResult> VerifyEmail([FromBody] VerifyEmailRequest request)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        try
+        {
+            var result = await _authService.VerifyEmailAsync(request.Email, request.Otp);
+            if (!result)
+                return BadRequest(new { Message = "Invalid or expired OTP" });
+
+            return Ok(new { Message = "Email verified successfully" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { Message = "An error occurred", Error = ex.Message });
+        }
+    }
 
     [HttpPost("forgot-password")]
     public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
