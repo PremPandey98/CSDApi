@@ -25,8 +25,8 @@ public class User
     [Column("device_id")]
     public string? DeviceId { get; set; }
 
-    [Column("is_mobile_device_login")]
-    public bool? IsMobileDeviceLogin { get; set; }
+    // Note: is_mobile_device_login removed - not stored in DB, only used for runtime checking
+    // Note: IsMobileDeviceLogin will be checked via DeviceId presence instead
 
     [Column("is_deleted")]
     public bool? IsDeleted { get; set; }

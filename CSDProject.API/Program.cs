@@ -6,6 +6,10 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure Kestrel to listen on the port provided by Koyeb
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8000";
+builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+
 // -----------------------------
 // 1️⃣ Add Services
 // -----------------------------

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CSDProject.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddNoticeAndAnnouncementTables : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -75,6 +75,50 @@ namespace CSDProject.Infrastructure.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "csd_Student_ContactUS",
+                columns: table => new
+                {
+                    ContactId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    MblNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    Subject = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Message = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_csd_Student_ContactUS", x => x.ContactId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "csd_Student_ProjectDetails",
+                columns: table => new
+                {
+                    ProjectId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProjectName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProjectDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProjectCoverImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProjectLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProjectCreatedBy = table.Column<int>(type: "int", nullable: true),
+                    PublishedBy = table.Column<int>(type: "int", nullable: true),
+                    GuidedBy = table.Column<int>(type: "int", nullable: true),
+                    PublishedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ApprovalStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ApprovalToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ApprovalRequestedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ApprovedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    RejectedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    TokenExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_csd_Student_ProjectDetails", x => x.ProjectId);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_csd_announcements_created_by",
                 table: "csd_announcements",
@@ -94,6 +138,12 @@ namespace CSDProject.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "csd_notices");
+
+            migrationBuilder.DropTable(
+                name: "csd_Student_ContactUS");
+
+            migrationBuilder.DropTable(
+                name: "csd_Student_ProjectDetails");
         }
     }
 }

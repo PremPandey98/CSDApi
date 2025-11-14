@@ -17,13 +17,26 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<User>().ToTable("csd_user_registration");
+        // Configure User entity - Table already exists from Java project
+        modelBuilder.Entity<User>()
+            .ToTable("csd_user_registration", t => t.ExcludeFromMigrations());
         modelBuilder.Entity<User>().HasKey(u => u.UserId);
         
-        // Configure BlacklistedToken table name to match your database
-        modelBuilder.Entity<BlacklistedToken>().ToTable("blacklisted_tokens");
+        // Configure BlacklistedToken - Table already exists from Java project
+        modelBuilder.Entity<BlacklistedToken>()
+            .ToTable("blacklisted_tokens", t => t.ExcludeFromMigrations());
 
-        // Configure Notice entity
+        // Configure StudentContactUs - NEW table to be created
+        modelBuilder.Entity<CsdStudentContactUs>()
+            .ToTable("csd_Student_ContactUS")
+            .HasKey(c => c.ContactId);
+
+        // Configure StudentProjectDetails - NEW table to be created
+        modelBuilder.Entity<StudentProjectDetails>()
+            .ToTable("csd_Student_ProjectDetails")
+            .HasKey(p => p.ProjectId);
+
+        // Configure Notice entity - NEW table to be created
         modelBuilder.Entity<Notice>()
             .ToTable("csd_notices")
             .HasKey(n => n.NoticeId);
@@ -34,7 +47,7 @@ public class AppDbContext : DbContext
             .HasForeignKey(n => n.CreatedBy)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // Configure Announcement entity
+        // Configure Announcement entity - NEW table to be created
         modelBuilder.Entity<Announcement>()
             .ToTable("csd_announcements")
             .HasKey(a => a.AnnouncementId);

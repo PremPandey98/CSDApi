@@ -15,6 +15,8 @@ public partial class CsdUserRegistration
 
     public DateOnly? CreatedOn { get; set; }
 
+    public string? DeviceId { get; set; }
+
     public DateOnly? Dob { get; set; }
 
     public string? Email { get; set; }
@@ -36,10 +38,6 @@ public partial class CsdUserRegistration
     public string? UpdatedBy { get; set; }
 
     public DateOnly? UpdatedOn { get; set; }
-
-    public string? DeviceId { get; set; }
-
-    public bool? IsMobileDeviceLogin { get; set; }
 
     public virtual CsdAdminRegistration? CsdAdminRegistration { get; set; }
 

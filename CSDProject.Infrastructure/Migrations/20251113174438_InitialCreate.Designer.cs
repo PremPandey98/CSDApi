@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CSDProject.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251103181057_AddIsMobileDeviceLoginToUser")]
-    partial class AddIsMobileDeviceLoginToUser
+    [Migration("20251113174438_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -123,7 +123,10 @@ namespace CSDProject.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("blacklisted_tokens", (string)null);
+                    b.ToTable("blacklisted_tokens", null, t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
             modelBuilder.Entity("CSDProject.Domain.Entities.CsdStudentContactUs", b =>
@@ -158,7 +161,7 @@ namespace CSDProject.Infrastructure.Migrations
 
                     b.HasKey("ContactId");
 
-                    b.ToTable("csd_Student_ContactUS");
+                    b.ToTable("csd_Student_ContactUS", (string)null);
                 });
 
             modelBuilder.Entity("CSDProject.Domain.Entities.Notice", b =>
@@ -299,7 +302,7 @@ namespace CSDProject.Infrastructure.Migrations
 
                     b.HasKey("ProjectId");
 
-                    b.ToTable("csd_Student_ProjectDetails");
+                    b.ToTable("csd_Student_ProjectDetails", (string)null);
                 });
 
             modelBuilder.Entity("CSDProject.Domain.Entities.User", b =>
@@ -323,6 +326,10 @@ namespace CSDProject.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("email");
 
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_deleted");
+
                     b.Property<bool?>("IsMobileDeviceLogin")
                         .HasColumnType("bit")
                         .HasColumnName("is_mobile_device_login");
@@ -341,7 +348,10 @@ namespace CSDProject.Infrastructure.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("csd_user_registration", (string)null);
+                    b.ToTable("csd_user_registration", null, t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
             modelBuilder.Entity("CSDProject.Domain.Entities.Announcement", b =>

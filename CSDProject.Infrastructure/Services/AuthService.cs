@@ -137,6 +137,16 @@ namespace CSDProject.Infrastructure.Services
                 Message = "OTP sent to your email. Please verify.",
                 OtpRequired = true
             };
+
+            var token = GenerateJwtToken(user);
+            return new LoginResponse
+            {
+                Token = token,
+                Name = user.Name ?? "",
+                Role = user.Role ?? "",
+                Message = "Login successful (OTP temporarily disabled).",
+                OtpRequired = false
+            };
         }
 
         // ---------------- First-Time Login ----------------
@@ -150,7 +160,7 @@ namespace CSDProject.Infrastructure.Services
             if (request.IsMobileDeviceLogin && !string.IsNullOrWhiteSpace(request.DeviceId))
             {
                 user.DeviceId = request.DeviceId;
-                user.IsMobileDeviceLogin = true;
+                // Note: IsMobileDeviceLogin field removed from DB - we check via DeviceId presence
                 await _db.SaveChangesAsync();
             }
 
@@ -176,7 +186,7 @@ namespace CSDProject.Infrastructure.Services
             if (request.IsMobileDeviceLogin && !string.IsNullOrWhiteSpace(request.DeviceId) && string.IsNullOrWhiteSpace(user.DeviceId))
             {
                 user.DeviceId = request.DeviceId;
-                user.IsMobileDeviceLogin = true;
+                // Note: IsMobileDeviceLogin field removed from DB - we check via DeviceId presence
                 await _db.SaveChangesAsync();
             }
 

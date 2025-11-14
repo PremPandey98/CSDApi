@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CSDProject.Infrastructure.ScaffoldedModels;
 
-public partial class DbAbe381CsddbContext : DbContext
+public partial class DbAc0a2dCsdpcbContext : DbContext
 {
-    public DbAbe381CsddbContext()
+    public DbAc0a2dCsdpcbContext()
     {
     }
 
-    public DbAbe381CsddbContext(DbContextOptions<DbAbe381CsddbContext> options)
+    public DbAc0a2dCsdpcbContext(DbContextOptions<DbAc0a2dCsdpcbContext> options)
         : base(options)
     {
     }
@@ -41,7 +41,7 @@ public partial class DbAbe381CsddbContext : DbContext
     {
         modelBuilder.Entity<BlacklistedToken>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__blacklis__3213E83F4EE3A0B3");
+            entity.HasKey(e => e.Id).HasName("PK__blacklis__3213E83FF323E102");
 
             entity.ToTable("blacklisted_tokens");
 
@@ -55,7 +55,7 @@ public partial class DbAbe381CsddbContext : DbContext
 
         modelBuilder.Entity<CsdAdminRegistration>(entity =>
         {
-            entity.HasKey(e => e.AdminId).HasName("PK__csd_admi__43AA4141A84FAE21");
+            entity.HasKey(e => e.AdminId).HasName("PK__csd_admi__43AA4141267F1734");
 
             entity.ToTable("csd_admin_registration");
 
@@ -98,7 +98,7 @@ public partial class DbAbe381CsddbContext : DbContext
 
         modelBuilder.Entity<CsdCourseDetail>(entity =>
         {
-            entity.HasKey(e => e.CourseId).HasName("PK__csd_cour__8F1EF7AE39EDD7E9");
+            entity.HasKey(e => e.CourseId).HasName("PK__csd_cour__8F1EF7AEE1948DD7");
 
             entity.ToTable("csd_course_details");
 
@@ -121,7 +121,7 @@ public partial class DbAbe381CsddbContext : DbContext
 
         modelBuilder.Entity<CsdEmailValidation>(entity =>
         {
-            entity.HasKey(e => e.EmailId).HasName("PK__csd_emai__3FEF876607E25791");
+            entity.HasKey(e => e.EmailId).HasName("PK__csd_emai__3FEF876680EC585B");
 
             entity.ToTable("csd_email_validation");
 
@@ -148,7 +148,7 @@ public partial class DbAbe381CsddbContext : DbContext
 
         modelBuilder.Entity<CsdFacultyExperience>(entity =>
         {
-            entity.HasKey(e => e.ExperienceId).HasName("PK__csd_facu__EB216AFCE28A5A37");
+            entity.HasKey(e => e.ExperienceId).HasName("PK__csd_facu__EB216AFC17A03A91");
 
             entity.ToTable("csd_faculty_experience");
 
@@ -174,7 +174,7 @@ public partial class DbAbe381CsddbContext : DbContext
 
         modelBuilder.Entity<CsdFacultyRegistration>(entity =>
         {
-            entity.HasKey(e => e.FacultyId).HasName("PK__csd_facu__7B00413C9C047252");
+            entity.HasKey(e => e.FacultyId).HasName("PK__csd_facu__7B00413CD25BD6B3");
 
             entity.ToTable("csd_faculty_registration");
 
@@ -217,7 +217,7 @@ public partial class DbAbe381CsddbContext : DbContext
 
         modelBuilder.Entity<CsdStudentRegistration>(entity =>
         {
-            entity.HasKey(e => e.StdId).HasName("PK__csd_stud__0B0245BAF4FBA943");
+            entity.HasKey(e => e.StdId).HasName("PK__csd_stud__0B0245BAAE0FDCC7");
 
             entity.ToTable("csd_student_registration");
 
@@ -266,7 +266,7 @@ public partial class DbAbe381CsddbContext : DbContext
 
         modelBuilder.Entity<CsdSubjectDetail>(entity =>
         {
-            entity.HasKey(e => e.SubjectId).HasName("PK__csd_subj__5004F660C50F553D");
+            entity.HasKey(e => e.SubjectId).HasName("PK__csd_subj__5004F6601FF7D738");
 
             entity.ToTable("csd_subject_details");
 
@@ -291,7 +291,7 @@ public partial class DbAbe381CsddbContext : DbContext
 
         modelBuilder.Entity<CsdUserRegistration>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__csd_user__B9BE370FBFDE23E9");
+            entity.HasKey(e => e.UserId).HasName("PK__csd_user__B9BE370F911A3DB8");
 
             entity.ToTable("csd_user_registration");
 
@@ -315,6 +315,10 @@ public partial class DbAbe381CsddbContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("created_by");
             entity.Property(e => e.CreatedOn).HasColumnName("created_on");
+            entity.Property(e => e.DeviceId)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("device_id");
             entity.Property(e => e.Dob).HasColumnName("dob");
             entity.Property(e => e.Email)
                 .HasMaxLength(50)

@@ -398,10 +398,11 @@ FodyWeavers.xsd
 *.sln.iml
 .idea/
 
-# Sensitive files
+# Sensitive files - Keep base appsettings.json but ignore environment-specific ones
 appsettings.Development.json
 appsettings.*.json
 !appsettings.json
+!appsettings.Production.json
 
 # User uploaded files (keep the folder structure but ignore contents)
 wwwroot/uploads/*
