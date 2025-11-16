@@ -119,7 +119,7 @@ namespace CSDProject.API.Controllers
                 return BadRequest("GuidedBy teacher is required");
 
             var teacher = await _db.Users.FindAsync(request.GuidedBy.Value);
-            if (teacher == null || (teacher.Role?.ToLower() != "teacher" && teacher.Role?.ToLower() != "super_admin"))
+            if (teacher == null || (teacher.Role?.ToLower() != "faculty" && teacher.Role?.ToLower() != "super_admin"))
                 return BadRequest("Invalid teacher selected for guidance");
 
             // Validate that ProjectCreatedBy student exists
