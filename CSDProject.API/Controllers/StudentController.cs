@@ -234,7 +234,6 @@ namespace CSDProject.API.Controllers
 
             // Only show approved projects
             var projects = await _db.StudentProjectDetails
-                .Where(p => p.ApprovalStatus == "Approved")
                 .OrderByDescending(p => p.ProjectId)
                 .ToListAsync();
 

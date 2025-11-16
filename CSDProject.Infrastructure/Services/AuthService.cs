@@ -219,7 +219,7 @@ namespace CSDProject.Infrastructure.Services
                 audience: _config["CSDSetting:Audience"],
                 claims: claims,
                 notBefore: DateTime.UtcNow,
-                expires: DateTime.UtcNow.AddHours(1),
+                expires: DateTime.UtcNow.AddHours(5),
                 signingCredentials: creds
             );
 
