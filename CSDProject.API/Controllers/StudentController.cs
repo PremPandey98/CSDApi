@@ -271,7 +271,7 @@ namespace CSDProject.API.Controllers
                     ApprovedAt = p.ApprovedAt,
                     RejectedAt = p.RejectedAt,
                     ProjectCoverImageUrl = !string.IsNullOrEmpty(p.ProjectCoverImagePath)
-                        ? $"{baseUrl}{p.ProjectCoverImagePath}"
+                        ? $"{p.ProjectCoverImagePath}"
                         : null
                 });
             }
