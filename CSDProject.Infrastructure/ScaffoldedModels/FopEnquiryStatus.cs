@@ -1,0 +1,11 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace CSDProject.Infrastructure.ScaffoldedModels;
+
+public partial class FopEnquiryStatus
+{
+    public int EnquiryId { get; set; }
+
+    public string? Status { get; set; }
+}

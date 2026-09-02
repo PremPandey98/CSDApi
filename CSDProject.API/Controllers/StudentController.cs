@@ -150,7 +150,7 @@ namespace CSDProject.API.Controllers
 
             // Generate approval token and expiry date
             var approvalToken = Guid.NewGuid().ToString();
-            var tokenExpiresAt = DateTime.UtcNow.AddDays(7); // 7 days as requested
+            var tokenExpiresAt = DateTime.UtcNow.AddDays(10); // 10 days as requested
 
             var project = new StudentProjectDetails
             {
@@ -317,7 +317,7 @@ namespace CSDProject.API.Controllers
                 ApprovedAt = p.ApprovedAt,
                 RejectedAt = p.RejectedAt,
                 ProjectCoverImageUrl = !string.IsNullOrEmpty(p.ProjectCoverImagePath)
-                    ? $"{baseUrl}{p.ProjectCoverImagePath}"
+                    ? $"{p.ProjectCoverImagePath}"
                     : null
             };
 

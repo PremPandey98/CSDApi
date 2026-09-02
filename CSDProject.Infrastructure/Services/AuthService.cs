@@ -213,13 +213,16 @@ namespace CSDProject.Infrastructure.Services
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["CSDSetting:SecretKey"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            
+            // Get token expiry from configuration (default: 1 hour)
+            var expiryHours = _config.GetValue<int>("CSDSetting:TokenExpiryHours", 1);
 
             var token = new JwtSecurityToken(
                 issuer: _config["CSDSetting:Issuer"],
                 audience: _config["CSDSetting:Audience"],
                 claims: claims,
                 notBefore: DateTime.UtcNow,
-                expires: DateTime.UtcNow.AddHours(5),
+                expires: DateTime.UtcNow.AddHours(expiryHours),
                 signingCredentials: creds
             );
 

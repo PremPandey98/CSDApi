@@ -57,6 +57,7 @@ app.UseCors(builder =>
 // 5️⃣ Authentication + Middleware
 // -----------------------------
 app.UseAuthentication();
+app.UseMiddleware<CSDProject.Infrastructure.Middleware.TokenRenewalMiddleware>(); // Token sliding expiration
 app.UseMiddleware<CSDProject.Infrastructure.Middleware.BlacklistedTokenMiddleware>();
 app.UseAuthorization();
 
