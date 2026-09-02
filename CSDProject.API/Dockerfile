@@ -15,7 +15,6 @@ WORKDIR "/src/CSDProject.API"
 
 RUN dotnet publish "CSDProject.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
 
 WORKDIR /app
