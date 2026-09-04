@@ -1,4 +1,4 @@
-﻿using CSDProject.Application.Interfaces;
+using CSDProject.Application.Interfaces;
 using CSDProject.Application.DTOs;
 using CSDProject.Infrastructure.Data;
 using CSDProject.Infrastructure.ScaffoldedModels;
@@ -37,10 +37,28 @@ public static class DependencyInjection
             services.AddSingleton(cloudinary);
         }
 
+        // Add HTTP Client for external API calls (Brevo, etc.)
+        services.AddHttpClient();
+
         // Register services
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUserService, UserService>();
-        services.AddScoped<IEmailService, EmailService>();
+        
+        // Register both email services so SMTP is preserved for future use
+        services.AddScoped<EmailService>();
+        services.AddScoped<BrevoEmailService>();
+
+        // Dynamically select email provider (default to Brevo for Render compatibility)
+        var emailProvider = config["EmailProvider"] ?? "Brevo";
+        if (emailProvider.Equals("Smtp", StringComparison.OrdinalIgnoreCase))
+        {
+            services.AddScoped<IEmailService, EmailService>();
+        }
+        else
+        {
+            services.AddScoped<IEmailService, BrevoEmailService>();
+        }
+
         services.AddScoped<INoticeService, NoticeService>();
         services.AddScoped<IAnnouncementService, AnnouncementService>();
         services.AddScoped<ICloudinaryService, CloudinaryService>();
